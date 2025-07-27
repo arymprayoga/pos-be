@@ -69,6 +69,8 @@ group :development, :test do
   # Testing framework
   gem "rspec-rails"
   gem "factory_bot_rails"
+  gem "shoulda-matchers"
+  gem "faker"
 
   # Development tools
   gem "pry-rails"
