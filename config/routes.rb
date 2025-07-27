@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
+  # Performance monitoring dashboard
+  mount RailsPerformance::Engine, at: "/admin/performance" if defined?(RailsPerformance)
+
   # API routes
   namespace :api do
     namespace :v1 do
@@ -9,6 +12,7 @@ Rails.application.routes.draw do
       post "/auth/login", to: "auth#login"
       post "/auth/refresh", to: "auth#refresh"
       delete "/auth/logout", to: "auth#logout"
+      delete "/auth/logout_all", to: "auth#logout_all"
 
       # Sync endpoints
       namespace :sync do

@@ -18,12 +18,18 @@ Rails.application.configure do
 
   # Filter sensitive parameters from logs
   config.lograge.custom_payload do |controller|
-    {
-      user_id: controller.current_user&.id,
-      company_id: controller.current_user&.company_id,
+    payload = {
       request_id: controller.request.request_id,
       ip: controller.request.remote_ip
     }
+
+    # Only add user data if controller responds to current_user
+    if controller.respond_to?(:current_user) && controller.current_user
+      payload[:user_id] = controller.current_user.id
+      payload[:company_id] = controller.current_user.company_id
+    end
+
+    payload
   end
 
   # Exclude health check endpoints from logs

@@ -62,6 +62,7 @@ class Rack::Attack
 end
 
 # Configure throttled response
-ActiveSupport::Notifications.subscribe("rack.attack") do |name, start, finish, request_id, req|
+ActiveSupport::Notifications.subscribe("rack.attack") do |name, start, finish, request_id, payload|
+  req = payload[:request]
   Rails.logger.warn "[Rack::Attack] #{req.env['rack.attack.match_type']} #{req.ip} #{req.request_method} #{req.fullpath}"
 end

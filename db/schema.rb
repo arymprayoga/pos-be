@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_27_090025) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_27_104211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -156,6 +156,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_090025) do
     t.index ["company_id", "is_default"], name: "index_payment_methods_on_company_id_and_is_default"
     t.index ["company_id", "name"], name: "index_payment_methods_on_company_id_and_name", unique: true, where: "(deleted_at IS NULL)"
     t.index ["deleted_at"], name: "index_payment_methods_on_deleted_at"
+  end
+
+  create_table "refresh_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "company_id", null: false
+    t.string "token_hash", null: false
+    t.string "device_fingerprint"
+    t.datetime "expires_at", null: false
+    t.datetime "revoked_at"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id", "user_id"], name: "index_refresh_tokens_on_company_id_and_user_id"
+    t.index ["expires_at"], name: "index_refresh_tokens_on_expires_at"
+    t.index ["revoked_at"], name: "index_refresh_tokens_on_revoked_at"
+    t.index ["token_hash"], name: "index_refresh_tokens_on_token_hash", unique: true
   end
 
   create_table "sales_order_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

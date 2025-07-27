@@ -14,10 +14,7 @@ if defined?(RailsPerformance)
     )
   end
 
-  # Mount the performance dashboard at /admin/performance for internal use
-  Rails.application.routes.append do
-    mount RailsPerformance::Engine, at: "/admin/performance"
-  end
+  # Note: Performance dashboard route is mounted in config/routes.rb
 
   # Disable performance tracking in test environment
   if Rails.env.test?
