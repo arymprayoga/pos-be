@@ -1,0 +1,43 @@
+# syntax=docker/dockerfile:1
+# Development Dockerfile with hot reload support
+
+ARG RUBY_VERSION=3.4.2
+FROM docker.io/library/ruby:$RUBY_VERSION-slim
+
+# Rails app lives here
+WORKDIR /rails
+
+# Install packages needed for development
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+        build-essential \
+        curl \
+        git \
+        libjemalloc2 \
+        libpq-dev \
+        libvips \
+        libyaml-dev \
+        pkg-config \
+        postgresql-client \
+        vim \
+        && rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Set development environment
+ENV RAILS_ENV="development" \
+    BUNDLE_PATH="/usr/local/bundle"
+
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy application code
+COPY . .
+
+# Create directories for development
+RUN mkdir -p log tmp/pids tmp/cache tmp/sockets storage
+
+# Expose port for development server
+EXPOSE 3000
+
+# Start the main process
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
