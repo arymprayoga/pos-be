@@ -41,7 +41,6 @@
 - **Receipt System**: Configurable HTML templates stored in database with caching
 
 ### **1.3 Rails Application Foundation**
-- **API-Only Configuration**: Optimized Rails setup without ActionView/Turbo
 - **CORS Setup**: Secure cross-origin configuration for React PWA integration
 - **Rate Limiting**: Company-scoped API rate limiting with rack-attack
 - **Security Headers**: Comprehensive security header configuration

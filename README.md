@@ -5,7 +5,7 @@ A Ruby on Rails 8 backend for a Point of Sale system designed for Indonesian res
 ## 🏗️ Technical Stack
 
 - **Framework**: Ruby on Rails 8 with ActiveAdmin
-- **Database**: PostgreSQL 15 with multi-tenancy (company_id approach)
+- **Database**: PostgreSQL 15 with UUID primary keys and multi-tenancy
 - **Authentication**: JWT with short-lived access tokens + refresh tokens
 - **Admin Panel**: ActiveAdmin for internal management
 - **Background Jobs**: Solid Queue (Solid Trifecta - Queue, Cache, Cable)
@@ -50,24 +50,30 @@ docker-compose exec app rails db:create db:migrate db:seed
 
 ### Local Development Setup
 
-1. Install dependencies:
+1. Configure environment variables:
+```bash
+cp .env.example .env
+# Update .env with your PostgreSQL credentials
+```
+
+2. Install dependencies:
 ```bash
 bundle install
 ```
 
-2. Setup database:
+3. Setup database:
 ```bash
 rails db:create db:migrate db:seed
 ```
 
-3. Start the server:
+4. Start the server:
 ```bash
 bin/dev
 ```
 
-## 📋 Phase 1.1 Implementation Status
+## 📋 Implementation Status
 
-✅ **Completed:**
+✅ **Phase 1.1 - Development Environment Setup:**
 - Rails 8 application initialization with ActiveAdmin support
 - Multi-stage Dockerfile for development/production optimization
 - Docker Compose configuration with PostgreSQL and Redis containers
@@ -78,12 +84,27 @@ bin/dev
 - Project structure and essential configuration files
 - API route structure preparation
 
+✅ **Phase 1.2 - Database Architecture Design:**
+- UUID primary keys implementation with uuid-ossp extension
+- Multi-tenant database schema with company_id segregation
+- 10 core tables: companies, users, categories, items, inventories, payment_methods, taxes, sales_orders, sales_order_items, inventory_ledgers
+- Model-only relationships (no database foreign keys)
+- Soft delete functionality with deleted_at timestamps
+- Audit trail with created_by/updated_by UUID tracking
+- Ruby enums for status and type fields
+- Offline synchronization support with sync_id fields
+- Comprehensive indexing for performance optimization
+
 ## 🏛️ System Architecture
 
-### Multi-tenancy
-- Single database with company_id segregation
-- All tables include company_id with composite indexing
-- API requests require X-Company-ID header
+### Database Architecture
+- **Primary Keys**: UUID for all tables using uuid-ossp extension
+- **Multi-tenancy**: Single database with company_id segregation
+- **Relationships**: Model-only associations (no database foreign keys)
+- **Audit Trail**: created_by/updated_by UUID tracking
+- **Soft Deletes**: deleted_at timestamps for data retention
+- **Offline Sync**: sync_id fields for transaction synchronization
+- **Performance**: Composite indexes on company_id + key fields
 
 ### Authentication
 - JWT-based authentication with refresh tokens
@@ -113,9 +134,9 @@ bin/dev
 ## 📊 Target Scale
 
 - **Capacity**: 500 stores × 100 transactions/day = 50,000 daily transactions
-- **Offline Support**: Timestamp-based conflict resolution with UUID transaction IDs
-- **Data Retention**: Permanent transaction storage with soft delete capability
-- **Localization**: Indonesian market support (Rupiah currency, Bahasa Indonesia)
+- **Offline Support**: UUID-based offline synchronization with conflict resolution
+- **Data Retention**: Permanent storage with soft delete and audit trail
+- **Localization**: Indonesian market defaults (IDR currency, Asia/Jakarta timezone)
 
 ## 🚢 Deployment
 
@@ -123,11 +144,12 @@ The application is configured for deployment with Kamal. See `config/deploy.yml`
 
 ## 📚 Next Phases
 
-1. **Phase 1.2**: Database Architecture Design
-2. **Phase 1.3**: Rails Application Foundation
-3. **Phase 2**: Authentication & User Management
-4. **Phase 3**: Core Business Logic
-5. **Phase 4**: API Design & Integration
+1. **Phase 1.3**: Rails Application Foundation
+2. **Phase 2**: Authentication & User Management
+3. **Phase 3**: Core Business Logic
+4. **Phase 4**: API Design & Integration
+5. **Phase 5**: Offline Synchronization
+6. **Phase 6**: Frontend Integration
 
 ## 📝 License
 

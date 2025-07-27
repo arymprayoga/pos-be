@@ -1,0 +1,76 @@
+Table Items {
+  itemId int [pk]
+  itemSku varchar [unique]
+  itemName varchar
+  itemCategory varchar
+  itemPrice numeric
+  itemDescription text
+  taxId int
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table Inventories {
+  inventId int [pk]
+  itemId int
+  stock int
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table taxes {
+  taxId int [pk]
+  name varchar
+  rate numeric
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table inventory_ledger {
+  ledgerId int [pk]
+  itemId int
+  type int // 'IN' or 'OUT'
+  quantity int
+  salesOrderItemsId int
+  remarks text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table sales_orders {
+  salesOrderId int [pk]
+  orderNo varchar [unique]
+  subTotal numeric
+  discount numeric
+  taxId int
+  taxRate numeric
+  additionalTaxOrder numeric
+  totalTaxItem numeric
+  totalTax numeric // totalTaxOrder + totalTaxItem
+  grandTotal numeric
+  paymentMethodId int
+  paidAmount numeric
+  changeAmount numeric
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table sales_order_items {
+  salesOrderItemsId int [pk]
+  salesOrderId int
+  itemId int
+  price numeric
+  quantity int
+  taxId int
+  taxRate numeric // snapshot
+  taxAmount numeric // snapshot
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table payment_methods {
+  paymentMethodId int [pk]
+  name varchar
+  created_at timestamp
+  updated_at timestamp
+}
