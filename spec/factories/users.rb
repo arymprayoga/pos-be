@@ -7,5 +7,21 @@ FactoryBot.define do
     role { :cashier }
     company
     active { true }
+
+    trait :cashier do
+      role { :cashier }
+    end
+
+    trait :manager do
+      role { :manager }
+    end
+
+    trait :owner do
+      role { :owner }
+    end
+
+    trait :inactive do
+      active { false }
+    end
   end
 end

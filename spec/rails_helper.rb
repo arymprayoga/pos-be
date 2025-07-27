@@ -59,6 +59,9 @@ RSpec.configure do |config|
 
   # Configure FactoryBot
   config.include FactoryBot::Syntax::Methods
+
+  # Include ActiveSupport time helpers
+  config.include ActiveSupport::Testing::TimeHelpers
 end
 
 # Configure Shoulda Matchers

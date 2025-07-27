@@ -41,10 +41,10 @@ RSpec.describe Tax, type: :model do
 
   describe 'scopes' do
     before do
-      @active_tax = create(:tax, company: company, active: true)
-      @inactive_tax = create(:tax, company: company, active: false)
-      @default_tax = create(:tax, company: company, is_default: true)
-      @deleted_tax = create(:tax, company: company)
+      @active_tax = create(:tax, name: 'Active Tax', company: company, active: true)
+      @inactive_tax = create(:tax, name: 'Inactive Tax', company: company, active: false)
+      @default_tax = create(:tax, name: 'Default Tax', company: company, is_default: true)
+      @deleted_tax = create(:tax, name: 'Deleted Tax', company: company)
       @deleted_tax.soft_delete!
     end
 

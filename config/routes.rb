@@ -22,12 +22,21 @@ Rails.application.routes.draw do
         get "/status", to: "data#status"
       end
 
+      # User management (Phase 2.2)
+      resources :users do
+        member do
+          patch :change_role
+          patch :manage_permissions
+          get :sessions
+          delete "sessions/:session_token", to: "users#terminate_session", as: :terminate_session
+        end
+      end
+
       # Core resources (to be implemented in later phases)
       # resources :companies, only: [:show, :update]
       # resources :categories
       # resources :products
       # resources :transactions
-      # resources :users
     end
   end
 

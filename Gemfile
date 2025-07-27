@@ -76,6 +76,7 @@ group :development, :test do
   # Development tools
   gem "pry-rails"
   gem "dotenv-rails"
+  gem "simplecov"
 end
 
 group :development do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_27_104211) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_27_112007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -158,6 +158,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_104211) do
     t.index ["deleted_at"], name: "index_payment_methods_on_deleted_at"
   end
 
+  create_table "permissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id", null: false
+    t.string "name", null: false
+    t.string "resource", null: false
+    t.string "action", null: false
+    t.text "description"
+    t.boolean "system_permission", default: false, null: false
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id", "name"], name: "index_permissions_on_company_id_and_name", unique: true
+    t.index ["company_id", "resource", "action"], name: "index_permissions_on_company_id_and_resource_and_action"
+    t.index ["company_id"], name: "index_permissions_on_company_id"
+    t.index ["deleted_at"], name: "index_permissions_on_deleted_at"
+    t.index ["system_permission"], name: "index_permissions_on_system_permission"
+  end
+
   create_table "refresh_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "company_id", null: false
@@ -236,6 +255,65 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_104211) do
     t.index ["deleted_at"], name: "index_taxes_on_deleted_at"
   end
 
+  create_table "user_actions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id", null: false
+    t.uuid "user_id"
+    t.uuid "user_session_id"
+    t.string "action", null: false
+    t.string "resource_type", null: false
+    t.string "resource_id"
+    t.json "details", default: {}
+    t.string "ip_address", null: false
+    t.text "user_agent"
+    t.boolean "success", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["action", "success"], name: "index_user_actions_on_action_and_success"
+    t.index ["action"], name: "index_user_actions_on_action"
+    t.index ["company_id"], name: "index_user_actions_on_company_id"
+    t.index ["resource_type", "resource_id"], name: "index_user_actions_on_resource_type_and_resource_id"
+    t.index ["success"], name: "index_user_actions_on_success"
+    t.index ["user_id", "created_at"], name: "index_user_actions_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_user_actions_on_user_id"
+    t.index ["user_session_id", "created_at"], name: "index_user_actions_on_user_session_id_and_created_at"
+    t.index ["user_session_id"], name: "index_user_actions_on_user_session_id"
+  end
+
+  create_table "user_permissions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.uuid "permission_id", null: false
+    t.uuid "granted_by"
+    t.datetime "granted_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["granted_by"], name: "index_user_permissions_on_granted_by"
+    t.index ["permission_id"], name: "index_user_permissions_on_permission_id"
+    t.index ["user_id", "permission_id"], name: "index_user_permissions_on_user_id_and_permission_id", unique: true
+    t.index ["user_id"], name: "index_user_permissions_on_user_id"
+  end
+
+  create_table "user_sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id", null: false
+    t.uuid "user_id", null: false
+    t.string "session_token", null: false
+    t.string "device_fingerprint", null: false
+    t.string "ip_address", null: false
+    t.text "user_agent"
+    t.datetime "last_activity_at"
+    t.datetime "expired_at"
+    t.datetime "logged_out_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_user_sessions_on_company_id"
+    t.index ["expired_at"], name: "index_user_sessions_on_expired_at"
+    t.index ["last_activity_at"], name: "index_user_sessions_on_last_activity_at"
+    t.index ["logged_out_at"], name: "index_user_sessions_on_logged_out_at"
+    t.index ["session_token"], name: "index_user_sessions_on_session_token", unique: true
+    t.index ["user_id", "device_fingerprint"], name: "index_user_sessions_on_user_id_and_device_fingerprint"
+    t.index ["user_id", "expired_at", "logged_out_at"], name: "index_user_sessions_active"
+    t.index ["user_id"], name: "index_user_sessions_on_user_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "company_id", null: false
     t.string "name", null: false
@@ -256,4 +334,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_104211) do
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
   end
+
+  add_foreign_key "permissions", "companies"
+  add_foreign_key "user_actions", "companies"
+  add_foreign_key "user_actions", "user_sessions"
+  add_foreign_key "user_actions", "users"
+  add_foreign_key "user_permissions", "permissions"
+  add_foreign_key "user_permissions", "users"
+  add_foreign_key "user_sessions", "companies"
+  add_foreign_key "user_sessions", "users"
 end

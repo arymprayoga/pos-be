@@ -1,4 +1,6 @@
 class Api::V1::BaseController < ApplicationController
+  include AuditLogging
+
   # Skip CSRF protection for API requests
   skip_before_action :verify_authenticity_token
 
@@ -11,7 +13,7 @@ class Api::V1::BaseController < ApplicationController
   # Ensure company context for multi-tenancy
   before_action :set_current_company
 
-  attr_reader :current_user, :current_company
+  attr_reader :current_user, :current_company, :current_user_session
 
   protected
 

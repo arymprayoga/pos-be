@@ -7,6 +7,9 @@ class Company < ApplicationRecord
   has_many :payment_methods, dependent: :destroy
   has_many :sales_orders, dependent: :destroy
   has_many :inventory_ledgers, dependent: :destroy
+  has_many :permissions, dependent: :destroy
+  has_many :user_sessions, dependent: :destroy
+  has_many :user_actions, dependent: :destroy
 
   validates :name, presence: true
   validates :email, presence: true, uniqueness: { conditions: -> { where(deleted_at: nil) } }
