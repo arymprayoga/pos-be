@@ -1,0 +1,128 @@
+<% content_for :title, "User Sessions - #{@user.name}" %>
+
+<div class="admin-sessions">
+  <h2>Active Sessions for <%= @user.name %></h2>
+  
+  <div class="attributes_table">
+    <table>
+      <tr>
+        <th>User Email</th>
+        <td><%= @user.email %></td>
+      </tr>
+      <tr>
+        <th>Company</th>
+        <td><%= link_to @user.company.name, admin_company_path(@user.company) if @user.company %></td>
+      </tr>
+      <tr>
+        <th>Role</th>
+        <td><%= @user.role.humanize %></td>
+      </tr>
+      <tr>
+        <th>Total Sessions</th>
+        <td><%= @sessions.count %></td>
+      </tr>
+      <tr>
+        <th>Active Sessions</th>
+        <td><%= @sessions.where(status: 'active').count %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="sessions-table">
+    <% if @sessions.any? %>
+      <table class="index_table">
+        <thead>
+          <tr>
+            <th>Session Token</th>
+            <th>Status</th>
+            <th>IP Address</th>
+            <th>User Agent</th>
+            <th>Created At</th>
+            <th>Last Activity</th>
+            <th>Expires At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sessions.each do |session| %>
+            <tr class="<%= cycle('odd', 'even') %>">
+              <td><%= truncate(session.session_token, length: 20) %></td>
+              <td>
+                <span class="status_tag <%= session.active? ? 'ok' : 'error' %>">
+                  <%= session.status.humanize %>
+                </span>
+              </td>
+              <td><%= session.ip_address %></td>
+              <td><%= truncate(session.user_agent, length: 50) %></td>
+              <td><%= session.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td><%= session.last_activity_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td><%= session.expires_at&.strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td>
+                <% if session.active? %>
+                  <%= link_to 'Terminate', 
+                      terminate_session_admin_user_path(@user, session_id: session.id), 
+                      method: :patch, 
+                      class: 'button',
+                      data: { confirm: 'Are you sure you want to terminate this session?' } %>
+                <% else %>
+                  <span class="disabled">Inactive</span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <div class="blank_slate_container">
+        <span class="blank_slate">
+          <span>No sessions found for this user.</span>
+        </span>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to 'Back to User', admin_user_path(@user), class: 'button' %>
+    <%= link_to 'All Users', admin_users_path, class: 'button' %>
+  </div>
+</div>
+
+<style>
+  .admin-sessions {
+    padding: 20px;
+  }
+  
+  .sessions-table {
+    margin-top: 20px;
+  }
+  
+  .sessions-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .sessions-table th,
+  .sessions-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .sessions-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  
+  .disabled {
+    color: #999;
+    font-style: italic;
+  }
+  
+  .form-actions {
+    margin-top: 20px;
+  }
+  
+  .form-actions .button {
+    margin-right: 10px;
+  }
+</style>

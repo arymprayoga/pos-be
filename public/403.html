@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>403 - Akses Ditolak | POS Admin</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .error-container {
+      text-align: center;
+      max-width: 600px;
+      padding: 40px 20px;
+    }
+    
+    .error-code {
+      font-size: 8em;
+      font-weight: 900;
+      margin: 0;
+      line-height: 1;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .error-title {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin: 20px 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .error-description {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+    
+    .error-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    
+    .action-buttons {
+      margin-top: 30px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 0 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn-primary {
+      background: white;
+      color: #dc2626;
+      border-color: white;
+    }
+    
+    .btn-primary:hover {
+      background: #f8f9fa;
+      color: #b91c1c;
+    }
+    
+    .error-details {
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      font-size: 0.9em;
+      opacity: 0.8;
+    }
+    
+    .error-details h4 {
+      margin-top: 0;
+      color: #fecaca;
+    }
+    
+    .error-details ul {
+      text-align: left;
+      margin: 10px 0;
+      padding-left: 20px;
+    }
+    
+    .error-details li {
+      margin-bottom: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 5em;
+      }
+      
+      .error-title {
+        font-size: 2em;
+      }
+      
+      .error-description {
+        font-size: 1.1em;
+      }
+      
+      .btn {
+        display: block;
+        margin: 10px auto;
+        max-width: 200px;
+      }
+      
+      .error-container {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-icon">🔐</div>
+    <h1 class="error-code">403</h1>
+    <h2 class="error-title">Akses Ditolak</h2>
+    <p class="error-description">
+      Maaf, Anda tidak memiliki izin untuk mengakses halaman ini. 
+      Silakan hubungi administrator sistem jika Anda yakin ini adalah kesalahan.
+    </p>
+    
+    <div class="action-buttons">
+      <a href="/admin" class="btn btn-primary">Kembali ke Dashboard</a>
+      <a href="javascript:history.back()" class="btn">Halaman Sebelumnya</a>
+    </div>
+    
+    <div class="error-details">
+      <h4>Kemungkinan Penyebab:</h4>
+      <ul>
+        <li>Anda tidak memiliki role atau permission yang sesuai</li>
+        <li>Sesi login Anda telah berakhir</li>
+        <li>Akun Anda telah dinonaktifkan</li>
+        <li>Halaman yang diminta memerlukan tingkat akses yang lebih tinggi</li>
+      </ul>
+      
+      <h4>Yang Dapat Anda Lakukan:</h4>
+      <ul>
+        <li>Login ulang dengan akun yang memiliki izin yang sesuai</li>
+        <li>Hubungi administrator sistem untuk meminta akses</li>
+        <li>Periksa kembali URL yang Anda tuju</li>
+        <li>Kembali ke halaman dashboard utama</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

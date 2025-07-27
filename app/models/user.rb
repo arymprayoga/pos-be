@@ -18,10 +18,22 @@ class User < ApplicationRecord
   validates :role, presence: true
 
   scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
+  scope :cashiers, -> { where(role: :cashier) }
+  scope :managers, -> { where(role: :manager) }
+  scope :owners, -> { where(role: :owner) }
 
   after_create :setup_default_permissions
   after_update :handle_role_change, if: :saved_change_to_role?
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name email role active created_at updated_at company_id]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    %w[company]
+  end
 
   def session_manager
     @session_manager ||= SessionManager.new(self)

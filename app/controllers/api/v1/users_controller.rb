@@ -41,7 +41,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   def create
     authorize_action!(:create, :users)
 
-    @user = current_company.users.build(user_params)
+    @user = current_company.users.build(create_user_params)
     @user.created_by = current_user.id
 
     if @user.save
@@ -71,7 +71,7 @@ class Api::V1::UsersController < Api::V1::BaseController
 
     old_attributes = @user.attributes.dup
 
-    if @user.update(user_params.except(:role))
+    if @user.update(user_params)
       audit_user_update(@user, old_attributes)
 
       render_success(
@@ -228,7 +228,41 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :active)
+    # Only allow basic profile updates for security
+    # Role changes must use the dedicated change_role endpoint
+    # Active status changes require user management permissions
+    permitted = [ :name, :email, :password, :password_confirmation ]
+
+    # Only allow active parameter if user has management permissions
+    if current_user.can_manage_users?
+      permitted << :active
+    end
+
+    params.require(:user).permit(permitted)
+  end
+
+  def create_user_params
+    # For user creation, allow role and active status with proper authorization
+    permitted_params = params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :active)
+
+    # Validate role if provided - prevent privilege escalation
+    if permitted_params[:role].present?
+      unless User.roles.key?(permitted_params[:role])
+        raise ActionController::BadRequest, "Invalid role specified"
+      end
+
+      # Only owners can create other owners
+      if permitted_params[:role] == "owner" && !current_user.owner?
+        raise ActionController::BadRequest, "Insufficient permissions to create owner users"
+      end
+
+      # Managers can't create managers or owners (only cashiers)
+      if current_user.manager? && permitted_params[:role].in?([ "manager", "owner" ])
+        raise ActionController::BadRequest, "Insufficient permissions to create users with elevated roles"
+      end
+    end
+
+    permitted_params
   end
 
   def authorize_user_management!

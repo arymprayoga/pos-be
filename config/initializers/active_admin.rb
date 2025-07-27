@@ -4,7 +4,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Pos Be"
+  config.site_title = "POS Admin - Indonesian Restaurant Management"
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -99,7 +99,7 @@ ActiveAdmin.setup do |config|
   # because, by default, user gets redirected to Dashboard. If user
   # doesn't have access to Dashboard, he'll end up in a redirect loop.
   # Method provided here should be defined in application_controller.rb.
-  # config.on_unauthorized_access = :access_denied
+  config.on_unauthorized_access = :access_denied
 
   # == Current User
   #
@@ -126,7 +126,7 @@ ActiveAdmin.setup do |config|
   # link. For example :get, :delete, :put, etc..
   #
   # Default:
-  # config.logout_link_method = :get
+  config.logout_link_method = :delete
 
   # == Root
   #
@@ -141,7 +141,7 @@ ActiveAdmin.setup do |config|
   # This allows your users to comment on any resource registered with Active Admin.
   #
   # You can completely disable comments:
-  # config.comments = false
+  config.comments = false
   #
   # You can change the name under which comments are registered:
   # config.comments_registration_name = 'AdminComment'
@@ -174,7 +174,10 @@ ActiveAdmin.setup do |config|
   # You can exclude possibly sensitive model attributes from being displayed,
   # added to forms, or exported by default by ActiveAdmin
   #
-  config.filter_attributes = [ :encrypted_password, :password, :password_confirmation ]
+  config.filter_attributes = [
+    :encrypted_password, :password, :password_confirmation,
+    :token, :secret, :api_key, :private_key, :refresh_token
+  ]
 
   # == Localize Date/Time Format
   #
@@ -225,7 +228,8 @@ ActiveAdmin.setup do |config|
   # and feel.
   #
   # To load a stylesheet:
-  #   config.register_stylesheet 'my_stylesheet.css'
+  # config.register_stylesheet "active_admin.scss"
+  # config.register_stylesheet "admin"
   #
   # You can provide an options hash for more control, which is passed along to stylesheet_link_tag():
   #   config.register_stylesheet 'my_print_stylesheet.css', media: :print
@@ -247,20 +251,13 @@ ActiveAdmin.setup do |config|
   #
   # To change the default utility navigation to show a link to your website & a logout btn
   #
-  #   config.namespace :admin do |admin|
-  #     admin.build_menu :utility_navigation do |menu|
-  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: :blank }
-  #       admin.add_logout_button_to_menu menu
-  #     end
-  #   end
-  #
-  # If you wanted to add a static menu item to the default menu provided:
-  #
-  #   config.namespace :admin do |admin|
-  #     admin.build_menu :default do |menu|
-  #       menu.add label: "My Great Website", url: "http://www.mygreatwebsite.com", html_options: { target: "_blank" }
-  #     end
-  #   end
+  config.namespace :admin do |admin|
+    admin.build_menu :utility_navigation do |menu|
+      menu.add label: "System Health", url: "/admin/dashboard"
+      menu.add label: "Reports", url: "/admin/reports"
+      admin.add_logout_button_to_menu menu
+    end
+  end
 
   # == Download Links
   #
@@ -269,30 +266,21 @@ ActiveAdmin.setup do |config|
   #
   # To disable/customize for the :admin namespace:
   #
-  #   config.namespace :admin do |admin|
-  #
-  #     # Disable the links entirely
-  #     admin.download_links = false
-  #
-  #     # Only show XML & PDF options
-  #     admin.download_links = [:xml, :pdf]
-  #
-  #     # Enable/disable the links based on block
-  #     #   (for example, with cancan)
-  #     admin.download_links = proc { can?(:view_download_links) }
-  #
-  #   end
+  config.namespace :admin do |admin|
+    # Enable CSV downloads
+    admin.download_links = [ :csv ]
+  end
 
   # == Pagination
   #
   # Pagination is enabled by default for all resources.
   # You can control the default per page count for all resources here.
   #
-  # config.default_per_page = 30
+  config.default_per_page = 25
   #
   # You can control the max per page count too.
   #
-  # config.max_per_page = 10_000
+  config.max_per_page = 100
 
   # == Filters
   #
@@ -300,7 +288,7 @@ ActiveAdmin.setup do |config|
   # hand side with a filter for each attribute of the registered model.
   # You can enable or disable them for all resources here.
   #
-  # config.filters = true
+  config.filters = true
   #
   # By default the filters include associations in a select, which means
   # that every record will be loaded for each association (up
@@ -308,19 +296,19 @@ ActiveAdmin.setup do |config|
   # You can enabled or disable the inclusion
   # of those filters by default here.
   #
-  # config.include_default_association_filters = true
+  config.include_default_association_filters = true
 
-  # config.maximum_association_filter_arity = 256 # default value of :unlimited will change to 256 in a future version
-  # config.filter_columns_for_large_association = [
-  #    :display_name,
-  #    :full_name,
-  #    :name,
-  #    :username,
-  #    :login,
-  #    :title,
-  #    :email,
-  #  ]
-  # config.filter_method_for_large_association = '_start'
+  config.maximum_association_filter_arity = 256 # default value of :unlimited will change to 256 in a future version
+  config.filter_columns_for_large_association = [
+     :display_name,
+     :full_name,
+     :name,
+     :username,
+     :login,
+     :title,
+     :email
+   ]
+  config.filter_method_for_large_association = "_start"
 
   # == Head
   #
@@ -334,7 +322,7 @@ ActiveAdmin.setup do |config|
   # By default, the footer shows the current Active Admin version. You can
   # override the content of the footer here.
   #
-  # config.footer = 'my custom footer text'
+  config.footer = "POS Backend Admin Panel - Indonesian Restaurant Management System"
 
   # == Sorting
   #
@@ -349,4 +337,19 @@ ActiveAdmin.setup do |config|
   # You can switch to using Webpacker here.
   #
   # config.use_webpacker = true
+
+  # == Security Settings
+  #
+  # Configure security settings for the admin panel
+  config.before_action :set_security_headers
+
+  private
+
+  def set_security_headers
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
+  end
 end

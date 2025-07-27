@@ -17,7 +17,12 @@ class Company < ApplicationRecord
   validates :timezone, presence: true
 
   scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name email phone address currency timezone active created_at updated_at]
+  end
 
   def soft_delete!
     update!(deleted_at: Time.current)

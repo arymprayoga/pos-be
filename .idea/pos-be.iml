@@ -61,6 +61,7 @@
     <orderEntry type="library" scope="PROVIDED" name="factory_bot (v6.5.4, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="factory_bot_rails (v6.5.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="faker (v3.5.2, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ffi (v1.17.2, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="formtastic (v5.0.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="formtastic_i18n (v0.7.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="fugit (v1.11.1, mise: 3.4.2) [gem]" level="application" />
@@ -108,7 +109,6 @@
     <orderEntry type="library" scope="PROVIDED" name="pp (v0.6.2, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="prettyprint (v0.2.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="prism (v1.4.0, mise: 3.4.2) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="propshaft (v1.2.1, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pry (v0.15.2, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="pry-rails (v0.3.11, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="psych (v5.2.6, mise: 3.4.2) [gem]" level="application" />
@@ -150,6 +150,8 @@
     <orderEntry type="library" scope="PROVIDED" name="rubocop-rails-omakase (v1.1.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-progressbar (v1.13.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby2_keywords (v0.0.5, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sassc (v2.4.0, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sassc-rails (v2.1.2, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="securerandom (v0.4.1, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="shoulda-matchers (v6.5.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="simplecov (v0.22.0, mise: 3.4.2) [gem]" level="application" />
@@ -158,12 +160,15 @@
     <orderEntry type="library" scope="PROVIDED" name="solid_cable (v3.0.11, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="solid_cache (v1.0.7, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="solid_queue (v1.2.1, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sprockets (v4.2.2, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="sprockets-rails (v3.5.2, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sshkit (v1.24.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stringio (v3.1.7, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tailwindcss-rails (v4.3.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tailwindcss-ruby (v4.1.11, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.4.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thruster (v0.1.14, mise: 3.4.2) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="tilt (v2.6.1, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="timeout (v0.4.3, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tsort (v0.2.0, mise: 3.4.2) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v2.0.6, mise: 3.4.2) [gem]" level="application" />
@@ -232,15 +237,10 @@
           </RakeTaskImpl>
           <RakeTaskImpl id="assets">
             <subtasks>
-              <RakeTaskImpl description="Removes old files in config.assets.output_path" fullCommand="assets:clean[count]" id="clean[count]" />
-              <RakeTaskImpl description="Remove config.assets.output_path" fullCommand="assets:clobber" id="clobber" />
-              <RakeTaskImpl description="Compile all the assets from config.assets.paths" fullCommand="assets:precompile" id="precompile" />
-              <RakeTaskImpl description="Print all the assets available in config.assets.paths" fullCommand="assets:reveal" id="reveal" />
-              <RakeTaskImpl id="reveal">
-                <subtasks>
-                  <RakeTaskImpl description="Print the full path of assets available in config.assets.paths" fullCommand="assets:reveal:full" id="full" />
-                </subtasks>
-              </RakeTaskImpl>
+              <RakeTaskImpl description="Remove old compiled assets" fullCommand="assets:clean[keep]" id="clean[keep]" />
+              <RakeTaskImpl description="Remove compiled assets" fullCommand="assets:clobber" id="clobber" />
+              <RakeTaskImpl description="Load asset compile environment" fullCommand="assets:environment" id="environment" />
+              <RakeTaskImpl description="Compile all the assets named in config.assets.precompile" fullCommand="assets:precompile" id="precompile" />
               <RakeTaskImpl description="" fullCommand="assets:clean" id="clean" />
             </subtasks>
           </RakeTaskImpl>

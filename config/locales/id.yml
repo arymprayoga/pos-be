@@ -1,0 +1,223 @@
+# Indonesian localization for POS Admin Interface
+id:
+  # Date and time formats
+  date:
+    formats:
+      default: "%d/%m/%Y"
+      short: "%d %b"
+      long: "%d %B %Y"
+  
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d %b %H:%M"
+      long: "%d %B %Y %H:%M:%S"
+
+  # ActiveAdmin translations
+  active_admin:
+    dashboard: "Dashboard"
+    dashboard_welcome:
+      welcome: "Selamat datang di POS Admin"
+      call_to_action: "Panel administrasi untuk manajemen sistem Point of Sale restaurant Indonesia"
+    
+    # Navigation
+    view: "Lihat"
+    edit: "Edit"
+    delete: "Hapus"
+    delete_confirmation: "Apakah Anda yakin ingin menghapus?"
+    new: "Tambah Baru"
+    create: "Buat"
+    update: "Perbarui"
+    cancel: "Batal"
+    filters: "Filter"
+    clear_filters: "Hapus Filter"
+    search: "Cari"
+    
+    # Batch actions
+    batch_actions:
+      button_label: "Aksi Batch"
+      default_confirmation: "Apakah Anda yakin ingin melakukan aksi ini?"
+      delete_confirmation: "Apakah Anda yakin ingin menghapus item yang dipilih?"
+      select_all: "Pilih Semua"
+      deselect_all: "Batalkan Pilihan"
+      
+    # Pagination
+    pagination:
+      previous: "Sebelumnya"
+      next: "Selanjutnya"
+      first: "Pertama"
+      last: "Terakhir"
+      
+    # Sidebars
+    sidebars:
+      filters: "Filter"
+      search_status: "Status Pencarian"
+      
+    # Status tags
+    status_tag:
+      "yes": "Ya"
+      "no": "Tidak"
+      "true": "Benar"
+      "false": "Salah"
+      
+    # Comments
+    comments:
+      title: "Komentar"
+      add: "Tambah Komentar"
+      resource: "Resource"
+      no_comments_yet: "Belum ada komentar"
+      body: "Isi"
+      author: "Penulis"
+      created_at: "Dibuat pada"
+      
+    # Devise translations for admin
+    devise:
+      login:
+        title: "Masuk ke Admin Panel"
+        submit: "Masuk"
+        email: "Email"
+        password: "Kata Sandi"
+        remember_me: "Ingat saya"
+      links:
+        forgot_password: "Lupa kata sandi?"
+        sign_in: "Masuk"
+        sign_out: "Keluar"
+        
+    # Access denied
+    access_denied:
+      message: "Anda tidak memiliki hak akses untuk melakukan aksi ini."
+      
+    # Logout
+    logout: "Keluar"
+    
+    # Empty states
+    empty: "Kosong"
+    blank_slate:
+      content: "Belum ada %{resource_name}."
+      link: "Buat yang pertama"
+      
+    # Download links
+    download:
+      csv: "Unduh CSV"
+      xml: "Unduh XML"
+      json: "Unduh JSON"
+      pdf: "Unduh PDF"
+
+  # Model-specific translations
+  activerecord:
+    models:
+      company:
+        one: "Perusahaan"
+        other: "Perusahaan"
+      user:
+        one: "Pengguna"
+        other: "Pengguna"
+      admin_user:
+        one: "Admin"
+        other: "Admin"
+      
+    attributes:
+      company:
+        name: "Nama Perusahaan"
+        email: "Email"
+        phone: "Telepon"
+        address: "Alamat"
+        currency: "Mata Uang"
+        timezone: "Zona Waktu"
+        active: "Aktif"
+        created_at: "Dibuat pada"
+        updated_at: "Diperbarui pada"
+        deleted_at: "Dihapus pada"
+        
+      user:
+        name: "Nama"
+        email: "Email"
+        role: "Peran"
+        active: "Aktif"
+        company: "Perusahaan"
+        password: "Kata Sandi"
+        password_confirmation: "Konfirmasi Kata Sandi"
+        created_at: "Dibuat pada"
+        updated_at: "Diperbarui pada"
+        deleted_at: "Dihapus pada"
+        
+      admin_user:
+        email: "Email"
+        password: "Kata Sandi"
+        password_confirmation: "Konfirmasi Kata Sandi"
+        created_at: "Dibuat pada"
+        updated_at: "Diperbarui pada"
+        current_sign_in_at: "Login Terakhir"
+        sign_in_count: "Jumlah Login"
+
+  # Business-specific terms
+  pos:
+    roles:
+      cashier: "Kasir"
+      manager: "Manajer"
+      owner: "Pemilik"
+      
+    status:
+      active: "Aktif"
+      inactive: "Tidak Aktif"
+      deleted: "Dihapus"
+      pending: "Menunggu"
+      
+    currency:
+      idr: "Rupiah (IDR)"
+      usd: "Dollar AS (USD)"
+      
+    # Dashboard sections
+    dashboard:
+      system_overview: "Ringkasan Sistem"
+      recent_activity: "Aktivitas Terkini"
+      business_metrics: "Metrik Bisnis"
+      top_companies: "Perusahaan Teratas"
+      user_distribution: "Distribusi Pengguna"
+      system_health: "Kesehatan Sistem"
+      quick_actions: "Aksi Cepat"
+      
+    # Reports
+    reports:
+      title: "Laporan Business Intelligence"
+      sales_performance: "Performa Penjualan"
+      user_activity: "Aktivitas Pengguna"
+      system_health: "Kesehatan Sistem"
+      growth_trends: "Tren Pertumbuhan"
+      security_report: "Laporan Keamanan"
+      
+    # Common actions
+    actions:
+      activate: "Aktifkan"
+      deactivate: "Nonaktifkan"
+      restore: "Pulihkan"
+      soft_delete: "Hapus"
+      terminate: "Akhiri"
+      export: "Ekspor"
+      import: "Impor"
+      
+    # Messages
+    messages:
+      created: "%{resource} berhasil dibuat."
+      updated: "%{resource} berhasil diperbarui."
+      deleted: "%{resource} berhasil dihapus."
+      restored: "%{resource} berhasil dipulihkan."
+      activated: "%{resource} berhasil diaktifkan."
+      deactivated: "%{resource} berhasil dinonaktifkan."
+      
+    # Confirmations
+    confirmations:
+      delete: "Apakah Anda yakin ingin menghapus %{resource}?"
+      activate: "Apakah Anda yakin ingin mengaktifkan %{resource}?"
+      deactivate: "Apakah Anda yakin ingin menonaktifkan %{resource}?"
+      restore: "Apakah Anda yakin ingin memulihkan %{resource}?"
+      
+    # Validation messages
+    errors:
+      messages:
+        blank: "tidak boleh kosong"
+        invalid: "tidak valid"
+        taken: "sudah digunakan"
+        too_short: "terlalu pendek (minimum %{count} karakter)"
+        too_long: "terlalu panjang (maksimum %{count} karakter)"
+        confirmation: "tidak cocok dengan konfirmasi"

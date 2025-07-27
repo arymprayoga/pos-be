@@ -1,0 +1,29 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "9f24aa52071c9ef2377080faffe701afcfccfe5e36b46f96ee6996be46948496",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/api/v1/users_controller.rb",
+      "line": 246,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, :active)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Api::V1::UsersController",
+        "method": "create_user_params"
+      },
+      "user_input": ":role",
+      "confidence": "Medium",
+      "cwe_id": [
+        915
+      ],
+      "note": "Role assignment during user creation is intentionally allowed and properly secured with authorization checks and role validation to prevent privilege escalation. Only authorized users can create users, and role validation prevents managers from creating elevated roles."
+    }
+  ],
+  "updated": "2025-07-27 22:15:00 +0700",
+  "brakeman_version": "7.1.0"
+}

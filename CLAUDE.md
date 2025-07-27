@@ -67,6 +67,12 @@ A Ruby on Rails 8 backend for a Point of Sale system designed for Indonesian res
 - Models inherit from `ApplicationRecord` with multi-tenant support
 - JSON responses with consistent error handling
 
+## Development Tools & Rules
+- **File Searching**: Always use Serena (MCP tool) for searching files, symbols, and code patterns
+- **Security Scanning**: Always use Semgrep for vulnerability detection and security analysis
+- Prefer symbolic operations (find_symbol, find_referencing_symbols) over basic text searches
+- Use targeted searches with proper file type filtering for efficiency
+
 ## Key Access Points
 - API: http://localhost:3000/api/v1
 - ActiveAdmin: http://localhost:3000/admin
