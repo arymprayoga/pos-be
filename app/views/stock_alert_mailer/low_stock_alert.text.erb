@@ -1,0 +1,15 @@
+⚠️ LOW STOCK ALERT
+
+Company: <%= @company.name %>
+
+Product Details:
+- Product: <%= @item.name %>
+- SKU: <%= @item.sku %>
+- Current Stock: <%= @current_stock %> units
+- Minimum Threshold: <%= @threshold %> units
+
+ACTION REQUIRED: This product is running low on stock. Please consider restocking soon to avoid running out.
+
+---
+This is an automated alert from your POS System.
+Alert triggered at: <%= Time.current.strftime("%B %d, %Y at %I:%M %p") %>

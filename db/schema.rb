@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_27_112007) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_27_223935) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "uuid-ossp"
@@ -177,6 +177,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_112007) do
     t.index ["system_permission"], name: "index_permissions_on_system_permission"
   end
 
+  create_table "price_histories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id", null: false
+    t.uuid "item_id", null: false
+    t.decimal "old_price", precision: 15, scale: 2, null: false
+    t.decimal "new_price", precision: 15, scale: 2, null: false
+    t.datetime "effective_date", null: false
+    t.text "reason"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id", "effective_date"], name: "index_price_histories_on_company_id_and_effective_date"
+    t.index ["company_id", "item_id"], name: "index_price_histories_on_company_id_and_item_id"
+    t.index ["company_id"], name: "index_price_histories_on_company_id"
+    t.index ["effective_date"], name: "index_price_histories_on_effective_date"
+    t.index ["item_id"], name: "index_price_histories_on_item_id"
+  end
+
   create_table "refresh_tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "user_id", null: false
     t.uuid "company_id", null: false
@@ -236,6 +254,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_112007) do
     t.index ["company_id", "status"], name: "index_sales_orders_on_company_id_and_status"
     t.index ["deleted_at"], name: "index_sales_orders_on_deleted_at"
     t.index ["sync_id"], name: "index_sales_orders_on_sync_id", unique: true, where: "(sync_id IS NOT NULL)"
+  end
+
+  create_table "stock_alerts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "company_id", null: false
+    t.uuid "item_id", null: false
+    t.integer "alert_type", default: 0, null: false
+    t.integer "threshold_value", default: 0, null: false
+    t.boolean "enabled", default: true, null: false
+    t.datetime "last_alerted_at"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alert_type", "enabled"], name: "index_stock_alerts_on_alert_type_and_enabled"
+    t.index ["company_id", "enabled"], name: "index_stock_alerts_on_company_id_and_enabled"
+    t.index ["company_id", "item_id"], name: "index_stock_alerts_on_company_id_and_item_id", unique: true
+    t.index ["company_id"], name: "index_stock_alerts_on_company_id"
+    t.index ["item_id"], name: "index_stock_alerts_on_item_id"
   end
 
   create_table "taxes", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -336,6 +372,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_27_112007) do
   end
 
   add_foreign_key "permissions", "companies"
+  add_foreign_key "price_histories", "companies"
+  add_foreign_key "price_histories", "items"
+  add_foreign_key "stock_alerts", "companies"
+  add_foreign_key "stock_alerts", "items"
   add_foreign_key "user_actions", "companies"
   add_foreign_key "user_actions", "user_sessions"
   add_foreign_key "user_actions", "users"

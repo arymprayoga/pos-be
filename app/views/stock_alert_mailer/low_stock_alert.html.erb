@@ -1,0 +1,24 @@
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+  <h2 style="color: #ff6b35;">⚠️ Low Stock Alert</h2>
+  
+  <p><strong>Company:</strong> <%= @company.name %></p>
+  
+  <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin: 20px 0;">
+    <h3 style="margin-top: 0; color: #856404;">Product Details</h3>
+    <p><strong>Product:</strong> <%= @item.name %></p>
+    <p><strong>SKU:</strong> <%= @item.sku %></p>
+    <p><strong>Current Stock:</strong> <span style="color: #dc3545; font-weight: bold;"><%= @current_stock %> units</span></p>
+    <p><strong>Minimum Threshold:</strong> <%= @threshold %> units</p>
+  </div>
+
+  <p style="color: #856404;">
+    <strong>Action Required:</strong> This product is running low on stock. Please consider restocking soon to avoid running out.
+  </p>
+
+  <hr style="margin: 30px 0;">
+  
+  <p style="font-size: 12px; color: #6c757d;">
+    This is an automated alert from your POS System. 
+    Alert triggered at: <%= Time.current.strftime("%B %d, %Y at %I:%M %p") %>
+  </p>
+</div>

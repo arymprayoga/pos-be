@@ -32,11 +32,17 @@ Rails.application.routes.draw do
         end
       end
 
-      # Core resources (to be implemented in later phases)
-      # resources :companies, only: [:show, :update]
-      # resources :categories
-      # resources :products
-      # resources :transactions
+      # Core resources
+      resources :companies, only: [ :show, :update ]
+      resources :categories
+      resources :products do
+        member do
+          post :add_variant
+          delete "variants/:variant_type", to: "products#remove_variant", as: :remove_variant
+          get :variant_combinations
+        end
+      end
+      # resources :transactions # To be implemented in Phase 3.2
     end
   end
 
