@@ -42,7 +42,18 @@ Rails.application.routes.draw do
           get :variant_combinations
         end
       end
-      # resources :transactions # To be implemented in Phase 3.2
+      resources :transactions do
+        member do
+          post :void
+          post :refund
+          get :receipt
+        end
+
+        collection do
+          get :summary
+          get :cash_drawer
+        end
+      end
     end
   end
 
